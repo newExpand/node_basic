@@ -1,0 +1,8 @@
+{
+    "name": "test-scripts",
+    "version": "1.0.0",
+    "scripts": {
+        "hello": "echo '안녕 노드.js'",
+        "start": "echo '이것은 시작이다'"
+    }
+}

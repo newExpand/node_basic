@@ -1,0 +1,28 @@
+@server = http://localhost:8080
+
+### GET 요청 보내기
+GET {{server}}/person
+
+### POST 요청 보내기
+POST {{server}}/person
+Content-Type: application/json
+
+{
+    "name": "승민리",
+    "age": 25,
+    "email": "seung@gmail.com"
+}
+
+### 생성한 문서확인
+GET {{server}}/person/seung@gmail.com
+
+### PUT 요청 보내기, 문서 수정하기
+PUT {{server}}/person/seung@gmail.com
+Content-Type: application/json
+
+{
+    "age": 30
+}
+
+### 문서 삭제하기
+DELETE  {{server}}/person/seung@gmail.com

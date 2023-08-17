@@ -4,7 +4,12 @@ const app = express();
 
 const mongodbConnection = require("./configs/mongodb-connection");
 
-app.engine("handlebars", handlebars.engine());
+app.engine(
+    "handlebars",
+    handlebars.create({
+        helpers: require("./configs/handlebars-helpers"),
+    }).engine
+);
 app.set("view engine", "handlebars");
 app.set("views", __dirname + "/views");
 

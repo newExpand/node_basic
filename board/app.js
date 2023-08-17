@@ -3,6 +3,10 @@ const handlebars = require("express-handlebars");
 const app = express();
 
 const mongodbConnection = require("./configs/mongodb-connection");
+const postService = require("./services/post-service");
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.engine(
     "handlebars",
@@ -19,6 +23,13 @@ app.get("/", (req, res) => {
 
 app.get("/write", (req, res) => {
     res.render("write", { title: "테스트 게시판" });
+});
+
+app.post("/write", async (req, res) => {
+    const post = req.body;
+    const result = await postService.writePost(collection, post);
+
+    res.redirect(`/detail/${result.insertedId}`);
 });
 
 app.get("/detail/:id", async (req, res) => {

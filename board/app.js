@@ -42,6 +42,34 @@ app.post("/write", async (req, res) => {
     res.redirect(`/detail/${result.insertedId}`);
 });
 
+app.post("/write-comment", async (req, res) => {
+    const { id, name, password, comment } = req.body;
+    const post = await postService.getPostById(collection, id);
+
+    if (post.comments) {
+        post.comments.push({
+            idx: post.comments.length + 1,
+            name,
+            password,
+            comment,
+            createdDt: new Date().toISOString(),
+        });
+    } else {
+        post.comments = [
+            {
+                idx: 1,
+                name,
+                password,
+                comment,
+                createdDt: new Date().toISOString(),
+            },
+        ];
+    }
+
+    postService.updatePost(collection, id, post);
+    return res.redirect(`/detail/${id}`);
+});
+
 app.get("/modify/:id", async (req, res) => {
     const post = await postService.getPostById(collection, req.params.id);
 

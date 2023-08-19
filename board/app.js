@@ -4,6 +4,7 @@ const app = express();
 
 const mongodbConnection = require("./configs/mongodb-connection");
 const postService = require("./services/post-service");
+const { ObjectId } = require("mongodb");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -63,6 +64,25 @@ app.post("/modify/", async (req, res) => {
         res.redirect(`/detail/${id}`);
     } catch (err) {
         console.error(err);
+    }
+});
+
+app.delete("/delete", async (req, res) => {
+    const { id, password } = req.body;
+    try {
+        const result = await collection.deleteOne({
+            _id: ObjectId(id),
+            password: password,
+        });
+
+        if (result.deletedCount !== 1) {
+            console.log("삭제 실패");
+            return res.json({ isSuccess: false });
+        }
+        res.json({ isSuccess: true });
+    } catch (err) {
+        console.error(err);
+        return res.json({ isSuccess: false });
     }
 });
 

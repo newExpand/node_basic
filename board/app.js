@@ -70,6 +70,27 @@ app.post("/write-comment", async (req, res) => {
     return res.redirect(`/detail/${id}`);
 });
 
+app.delete("/write-comment", async (req, res) => {
+    const { id, idx, password } = req.body;
+
+    const post = await collection.findOne(
+        {
+            _id: ObjectId(id),
+            comments: { $elemMatch: { idx: parseInt(idx), password } },
+        },
+        postService.projectionOption
+    );
+
+    if (!post) {
+        return res.json({ isSuccess: false });
+    }
+
+    post.comments = post.comments.filter((comment) => comment.idx != idx);
+    postService.updatePost(collection, id, post);
+    
+    return res.json({ isSuccess: true });
+});
+
 app.get("/modify/:id", async (req, res) => {
     const post = await postService.getPostById(collection, req.params.id);
 
